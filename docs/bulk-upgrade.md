@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-`zscaler/ztb_bulk_upgrade.py` is a bulk firmware management tool for Zscaler Zero Trust Branch (ZTB) appliances. It communicates with the AirGap API to list gateways, download firmware images, and orchestrate upgrades across an entire fleet. The tool supports download-only and full upgrade modes, is HA-aware (upgrading standby nodes before active ones for zero downtime), and maintains a persistent state file so that interrupted operations can be resumed without re-processing completed gateways.
+`ztb_bulk_upgrade.py` is a bulk firmware management tool for Zscaler Zero Trust Branch (ZTB) appliances. It communicates with the AirGap API to list gateways, download firmware images, and orchestrate upgrades across an entire fleet. The tool supports download-only and full upgrade modes, is HA-aware (upgrading standby nodes before active ones for zero downtime), and maintains a persistent state file so that interrupted operations can be resumed without re-processing completed gateways.
 
 ## 2. Prerequisites
 
@@ -22,22 +22,22 @@ The token endpoint is derived as `https://<vanity_domain>.zslogin.net/oauth2/v1/
 
 ```bash
 # Interactive wizard (default when no subcommand is given)
-python3 zscaler/ztb_bulk_upgrade.py
+python3 ztb_bulk_upgrade.py
 
 # List all gateways with current firmware versions
-python3 zscaler/ztb_bulk_upgrade.py inventory
+python3 ztb_bulk_upgrade.py inventory
 
 # Download firmware to all gateways (no reboot, no downtime)
-python3 zscaler/ztb_bulk_upgrade.py download --version latest --all
+python3 ztb_bulk_upgrade.py download --version latest --all
 
 # Upgrade all gateways to a specific version
-python3 zscaler/ztb_bulk_upgrade.py upgrade --version 24.3.1 --all
+python3 ztb_bulk_upgrade.py upgrade --version 24.3.1 --all
 
 # Dry-run: see the execution plan without making any changes
-python3 zscaler/ztb_bulk_upgrade.py upgrade --version latest --all --dry-run
+python3 ztb_bulk_upgrade.py upgrade --version latest --all --dry-run
 
 # Resume an interrupted operation
-python3 zscaler/ztb_bulk_upgrade.py resume
+python3 ztb_bulk_upgrade.py resume
 ```
 
 ## 4. Commands
@@ -93,7 +93,7 @@ Credentials can be provided via CLI flags, `.env` file, or environment variables
 ### Download Only
 
 ```bash
-python3 zscaler/ztb_bulk_upgrade.py download --version 25.1.2 --all
+python3 ztb_bulk_upgrade.py download --version 25.1.2 --all
 ```
 
 Stages the firmware image on each selected gateway. No reboot occurs, no service disruption. This is useful for pre-staging firmware during a maintenance window preparation.
@@ -101,7 +101,7 @@ Stages the firmware image on each selected gateway. No reboot occurs, no service
 ### Full Upgrade
 
 ```bash
-python3 zscaler/ztb_bulk_upgrade.py upgrade --version 25.1.2 --all
+python3 ztb_bulk_upgrade.py upgrade --version 25.1.2 --all
 ```
 
 Two-phase operation per gateway:
@@ -133,7 +133,7 @@ The tool maintains a state file (`.ztb_upgrade_state.json` in the current direct
 
 ```bash
 # Resume picks up where you left off
-python3 zscaler/ztb_bulk_upgrade.py resume
+python3 ztb_bulk_upgrade.py resume
 ```
 
 ## 11. Reports

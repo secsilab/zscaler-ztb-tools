@@ -1,87 +1,98 @@
-# ZTB Tools
+# Zscaler ZTB Tools
 
-Automation tools for Zscaler Zero Trust Branch (ZTB) appliances via the AirGap API.
+Automation tools for Zscaler Zero Trust Branch (ZTB) appliances. All scripts use the AirGap API and require only Python 3.10+ or PowerShell 7+ — no external dependencies.
 
-Available in both **Python** and **PowerShell** with identical functionality. Pick whichever fits your environment.
+## Tools at a Glance
 
-## Tools
+| Tool | Purpose | Python | PowerShell |
+|---|---|---|---|
+| **Bulk Upgrade** | Full firmware lifecycle: inventory, download, upgrade, HA-aware, resume, wizard | `ztb_bulk_upgrade.py` | `ztb_bulk_upgrade.ps1` |
+| **Download** | Pre-stage firmware across the fleet in one command | `ztb_download.py` | `ztb_download.ps1` |
 
-### `ztb_bulk_upgrade` -- Bulk Firmware Upgrade
+## Setup
 
-Full-featured firmware management tool: download, upgrade, HA-aware sequencing, resume, interactive wizard, and audit reports.
-
-**Key features:**
-- **Download-only** or **download + upgrade** modes
-- **HA-aware**: upgrades standby first, waits for failover, then upgrades former master (zero downtime)
-- **Flexible selection**: by site (glob), cluster, version threshold, gateway list, or file
-- **Resumable**: state saved after each gateway, interrupted runs resume cleanly
-- **Interactive wizard**: run without arguments for guided mode
-- **Reports**: JSON + CSV output for audit trail
-- **Dry-run**: preview the plan without executing
-
-#### Quick start
-
-**Python** (`ztb_bulk_upgrade.py`):
 ```bash
-python3 ztb_bulk_upgrade.py                                          # Interactive wizard
-python3 ztb_bulk_upgrade.py inventory                                # View inventory
-python3 ztb_bulk_upgrade.py download --version latest --all          # Download only
+git clone https://github.com/secsilab/zscaler-ztb-tools.git
+cd zscaler-ztb-tools
+cp .env.example .env
+# Edit .env with your Zscaler credentials
+```
+
+## Bulk Upgrade Tool
+
+Full documentation: [docs/bulk-upgrade.md](docs/bulk-upgrade.md)
+
+```bash
+# Interactive wizard
+python3 ztb_bulk_upgrade.py
+
+# View inventory
+python3 ztb_bulk_upgrade.py inventory
+
+# Download firmware only (no reboot)
+python3 ztb_bulk_upgrade.py download --version latest --all
+
+# Upgrade with dry-run
 python3 ztb_bulk_upgrade.py upgrade --version 24.3.1 --site "Paris-*" --dry-run
-python3 ztb_bulk_upgrade.py resume                                   # Resume interrupted run
+
+# Upgrade for real
+python3 ztb_bulk_upgrade.py upgrade --version 24.3.1 --site "Paris-*"
+
+# Resume interrupted run
+python3 ztb_bulk_upgrade.py resume
 ```
 
-**PowerShell** (`ztb_bulk_upgrade.ps1`):
+<details>
+<summary>PowerShell equivalent</summary>
+
 ```powershell
-./ztb_bulk_upgrade.ps1                                               # Interactive wizard
-./ztb_bulk_upgrade.ps1 inventory                                     # View inventory
-./ztb_bulk_upgrade.ps1 download -Version latest -All                 # Download only
+./ztb_bulk_upgrade.ps1
+./ztb_bulk_upgrade.ps1 inventory
+./ztb_bulk_upgrade.ps1 download -Version latest -All
 ./ztb_bulk_upgrade.ps1 upgrade -Version 24.3.1 -Site "Paris-*" -DryRun
-./ztb_bulk_upgrade.ps1 resume                                        # Resume interrupted run
+./ztb_bulk_upgrade.ps1 upgrade -Version 24.3.1 -Site "Paris-*"
+./ztb_bulk_upgrade.ps1 resume
 ```
+</details>
 
-The state file `.ztb_upgrade_state.json` is interoperable between both versions -- you can start a run in Python and resume it in PowerShell, or vice versa.
+## Download Tool (compact)
 
-Full documentation: [docs/ztb-bulk-upgrade.md](docs/ztb-bulk-upgrade.md)
+For quick pre-staging without the full upgrade workflow. No state, no resume, no wizard — just download.
 
----
+Full documentation: [docs/download.md](docs/download.md)
 
-### `ztb_download` -- Compact Download-Only Tool
-
-Lightweight single-purpose script that pre-stages firmware across the fleet in one command. No state file, no resume, no wizard, no reports -- just download.
-
-**Python** (`ztb_download.py`):
 ```bash
 python3 ztb_download.py --version latest --all
-python3 ztb_download.py --version 24.3.1 --site "Paris-*" --dry-run
+python3 ztb_download.py --version 24.3.1 --below-version 24.3.0 --dry-run
 ```
 
-**PowerShell** (`ztb_download.ps1`):
+<details>
+<summary>PowerShell equivalent</summary>
+
 ```powershell
 ./ztb_download.ps1 -Version latest -All
-./ztb_download.ps1 -Version 24.3.1 -Site "Paris-*" -DryRun
+./ztb_download.ps1 -Version 24.3.1 -BelowVersion 24.3.0 -DryRun
 ```
+</details>
 
----
+## Credentials
 
-## Prerequisites
+All tools read credentials from `.env` (or CLI flags):
 
-- **Python**: 3.10+ (stdlib only, no external dependencies)
-- **PowerShell**: 7+ (pwsh) for cross-platform support
-- Zscaler credentials:
+| Variable | Description |
+|---|---|
+| `ZSCALER_CLIENT_ID` | OAuth2 client ID |
+| `ZSCALER_CLIENT_SECRET` | OAuth2 client secret |
+| `ZSCALER_VANITY_DOMAIN` | Tenant vanity domain (e.g. `secsilab`) |
+| `ZSCALER_AIRGAP_SITE` | AirGap site name (e.g. `thibaultparis`) |
 
-```bash
-# .env file (same directory as script)
-ZSCALER_CLIENT_ID=<your_client_id>
-ZSCALER_CLIENT_SECRET=<your_client_secret>
-ZSCALER_VANITY_DOMAIN=<your_vanity_domain>
-ZSCALER_AIRGAP_SITE=<your_airgap_site>
-```
+CLI flags (`--client-id` / `-ClientId`, etc.) override `.env` values.
 
-Or pass credentials via CLI flags (`--client-id` / `-ClientId`, etc.).
+## Interoperability
 
-## Contributing
-
-More ZTB automation tools will be added over time. Each tool is a standalone script with no external dependencies.
+- Python and PowerShell versions have identical functionality
+- State file `.ztb_upgrade_state.json` is interoperable — start in Python, resume in PowerShell (or vice versa)
+- Same API calls, same logic, same output format
 
 ## License
 
