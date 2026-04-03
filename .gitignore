@@ -1,0 +1,18 @@
+# Credentials
+.env
+.mcp.json
+
+# State files
+.ztb_upgrade_state.json
+
+# Reports (generated)
+ztb_upgrade_report_*.json
+ztb_upgrade_report_*.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
