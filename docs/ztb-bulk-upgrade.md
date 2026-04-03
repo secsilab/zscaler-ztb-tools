@@ -185,3 +185,68 @@ This prevents disk space exhaustion on gateways that have accumulated multiple f
 | **Disk space full on gateway** | The script auto-cleans old staged images before each download, but if the gateway storage is still full, manually check via the AirGap portal or API for leftover images. |
 | **API connectivity error** | Verify network access to `<airgap_site>-api.goairgap.com` and `<vanity_domain>.zslogin.net`. Check that the OAuth2 client credentials are valid and not expired. |
 | **HA cluster partially upgraded** | Use `resume` to continue. The tool will reset failed gateways and retry them while skipping already-completed ones. |
+
+## 14. PowerShell Version
+
+A functionally identical PowerShell version is provided as `ztb_bulk_upgrade.ps1`. It uses the same AirGap API endpoints, the same state file format, and the same HA-aware sequencing logic.
+
+### Requirements
+
+- **PowerShell 7+** (pwsh) for cross-platform support (Windows, macOS, Linux)
+- Same `.env` file or environment variables as the Python version
+
+### Parameter Mapping
+
+PowerShell uses its own naming conventions. The mapping from Python CLI flags:
+
+| Python flag | PowerShell parameter | Notes |
+|---|---|---|
+| `download` / `upgrade` / `inventory` / `resume` | `-Command` (positional) | First positional argument |
+| `--version` | `-Version` | |
+| `--all` | `-All` | Switch parameter |
+| `--site <pattern>` | `-Site <pattern>` | |
+| `--cluster <id>` | `-Cluster <id>` | |
+| `--gateway <names>` | `-Gateway <names>` | Comma-separated |
+| `--below-version <v>` | `-BelowVersion <v>` | |
+| `--from-file <path>` | `-FromFile <path>` | |
+| `--dry-run` | `-DryRun` | Switch parameter |
+| `--on-error <mode>` | `-OnError <mode>` | `Continue` or `Stop` |
+| `--timeout <min>` | `-Timeout <min>` | |
+| `--client-id` | `-ClientId` | |
+| `--client-secret` | `-ClientSecret` | |
+| `--vanity-domain` | `-VanityDomain` | |
+| `--airgap-site` | `-AirgapSite` | |
+| `--env-file` | `-EnvFile` | |
+
+### Quick Start (PowerShell)
+
+```powershell
+# Interactive wizard (default when no command is given)
+./ztb_bulk_upgrade.ps1
+
+# List all gateways with current versions
+./ztb_bulk_upgrade.ps1 inventory
+
+# Download firmware to all gateways (no reboot, no downtime)
+./ztb_bulk_upgrade.ps1 download -Version latest -All
+
+# Upgrade all gateways to a specific version
+./ztb_bulk_upgrade.ps1 upgrade -Version 24.3.1 -All
+
+# Dry-run: see the execution plan without making any changes
+./ztb_bulk_upgrade.ps1 upgrade -Version latest -All -DryRun
+
+# Upgrade gateways below a certain version
+./ztb_bulk_upgrade.ps1 upgrade -Version latest -BelowVersion 24.3.0
+
+# Resume an interrupted operation
+./ztb_bulk_upgrade.ps1 resume
+```
+
+### State File Interoperability
+
+The state file `.ztb_upgrade_state.json` is fully interoperable between the Python and PowerShell versions. You can:
+
+- Start a download with Python and resume it with PowerShell (or vice versa)
+- Check run status from either version
+- The JSON schema is identical across both implementations
