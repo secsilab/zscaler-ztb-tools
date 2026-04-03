@@ -48,10 +48,10 @@
     Zscaler OAuth2 client secret (overrides .env / env var).
 
 .PARAMETER VanityDomain
-    Zscaler vanity domain, e.g. secsilab (overrides .env / env var).
+    Zscaler vanity domain, e.g. acme (overrides .env / env var).
 
 .PARAMETER AirgapSite
-    AirGap site name, e.g. thibaultparis (overrides .env / env var).
+    AirGap site name, e.g. my-site (overrides .env / env var).
 
 .PARAMETER EnvFile
     Path to .env file. Default: ../.env relative to script directory.
@@ -70,8 +70,8 @@
 
 .EXAMPLE
     # Upgrade a specific site (dry-run first)
-    ./ztb_bulk_upgrade.ps1 upgrade -Version 25.1.2 -Site pve-ztb -DryRun
-    ./ztb_bulk_upgrade.ps1 upgrade -Version 25.1.2 -Site pve-ztb
+    ./ztb_bulk_upgrade.ps1 upgrade -Version 25.1.2 -Site branch-01 -DryRun
+    ./ztb_bulk_upgrade.ps1 upgrade -Version 25.1.2 -Site branch-01
 
 .EXAMPLE
     # Upgrade gateways below a certain version

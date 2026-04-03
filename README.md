@@ -83,8 +83,8 @@ All tools read credentials from `.env` (or CLI flags):
 |---|---|
 | `ZSCALER_CLIENT_ID` | OAuth2 client ID |
 | `ZSCALER_CLIENT_SECRET` | OAuth2 client secret |
-| `ZSCALER_VANITY_DOMAIN` | Tenant vanity domain (e.g. `secsilab`) |
-| `ZSCALER_AIRGAP_SITE` | AirGap site name (e.g. `thibaultparis`) |
+| `ZSCALER_VANITY_DOMAIN` | Tenant vanity domain (e.g. `acme`) |
+| `ZSCALER_AIRGAP_SITE` | AirGap site name (e.g. `my-site`) |
 
 CLI flags (`--client-id` / `-ClientId`, etc.) override `.env` values.
 

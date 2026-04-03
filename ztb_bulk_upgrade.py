@@ -16,8 +16,8 @@ Usage:
     python3 zscaler/ztb_bulk_upgrade.py download --version 25.1.2 --all
 
     # Upgrade a specific site (dry-run first)
-    python3 zscaler/ztb_bulk_upgrade.py upgrade --version 25.1.2 --site pve-ztb --dry-run
-    python3 zscaler/ztb_bulk_upgrade.py upgrade --version 25.1.2 --site pve-ztb
+    python3 zscaler/ztb_bulk_upgrade.py upgrade --version 25.1.2 --site branch-01 --dry-run
+    python3 zscaler/ztb_bulk_upgrade.py upgrade --version 25.1.2 --site branch-01
 
     # Upgrade gateways below a certain version
     python3 zscaler/ztb_bulk_upgrade.py upgrade --version 25.1.2 --below-version 25.1.0
@@ -1660,9 +1660,9 @@ def _add_credential_flags(parser):
     cred.add_argument("--client-secret", dest="client_secret",
                       help="Zscaler OAuth2 client secret")
     cred.add_argument("--vanity-domain", dest="vanity_domain",
-                      help="Zscaler vanity domain (e.g. secsilab)")
+                      help="Zscaler vanity domain (e.g. acme)")
     cred.add_argument("--airgap-site", dest="airgap_site",
-                      help="AirGap site name (e.g. thibaultparis)")
+                      help="AirGap site name (e.g. my-site)")
     cred.add_argument("--env-file", dest="env_file",
                       help="Path to .env file (default: ../.env)")
 

@@ -13,8 +13,8 @@
 |---|---|---|
 | `ZSCALER_CLIENT_ID` | OAuth2 client ID for the Zscaler API | `abc123...` |
 | `ZSCALER_CLIENT_SECRET` | OAuth2 client secret | `secret...` |
-| `ZSCALER_VANITY_DOMAIN` | Tenant vanity domain (used for token URL) | `secsilab` |
-| `ZSCALER_AIRGAP_SITE` | AirGap site identifier (used for API base URL) | `thibaultparis` |
+| `ZSCALER_VANITY_DOMAIN` | Tenant vanity domain (used for token URL) | `acme` |
+| `ZSCALER_AIRGAP_SITE` | AirGap site identifier (used for API base URL) | `my-site` |
 
 The token endpoint is derived as `https://<vanity_domain>.zslogin.net/oauth2/v1/token` and the API base as `https://<airgap_site>-api.goairgap.com`.
 
@@ -57,7 +57,7 @@ Selection flags determine which gateways are targeted by the `download` and `upg
 | Flag | Description |
 |---|---|
 | `--all` | Select all gateways in the fleet |
-| `--site <pattern>` | Select gateways whose site name matches the glob pattern (e.g. `pve-ztb*`) |
+| `--site <pattern>` | Select gateways whose site name matches the glob pattern (e.g. `branch-01*`) |
 | `--cluster <id>` | Select all gateways in a specific cluster (by cluster ID) |
 | `--gateway <id,...>` | Select specific gateways by name (comma-separated) |
 | `--below-version <v>` | Select gateways running a version below the specified threshold |
